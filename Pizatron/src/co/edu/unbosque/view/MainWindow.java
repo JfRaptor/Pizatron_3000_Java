@@ -23,14 +23,14 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.border.Border;
 
-public class MainWindow extends JFrame implements MouseListener,ActionListener{
+public class MainWindow extends JFrame implements MouseListener, ActionListener{
 	
 	
-	JPanel launchMenuLeft,launchMenuRight,buttonsPanel;
-	JButton playB,configB,infoB;
-	JLabel iconLabelLaunchMenu;
-	JTextPane leaderboardsLaunchMenu;
-	ImageIcon bgImage,iconIMG = new ImageIcon("logo.png"), config,help,playBIMG;
+	JPanel left = new JPanel(),right = new JPanel(),buttonsPanel= new JPanel();
+	ImageIcon bgImage,iconIMG = new ImageIcon("logo.png"),config = new ImageIcon("config.png"),help = new ImageIcon("info.png"),playBIMG = new ImageIcon("playB.png");;
+	JButton playB = new JButton(playBIMG) ,configB = new JButton(config),infoB = new JButton(help);
+	JLabel iconLabel = new JLabel();
+	JTextPane leaderboard = new JTextPane();
 	int xDim = 1700 ,yDim = 800;
 	
 	
@@ -43,7 +43,7 @@ public class MainWindow extends JFrame implements MouseListener,ActionListener{
 		setSize(xDim,yDim);
 		setVisible(true);
 		setTitle("Pizzatron 3000");
-		launchMenu(launchMenuLeft,launchMenuRight,iconLabelLaunchMenu,buttonsPanel,playB,configB,infoB,leaderboardsLaunchMenu,this,bgImage,iconIMG,config,help,playBIMG);
+		launchMenu(left,right,iconLabel,buttonsPanel,playB,configB,infoB,leaderboard,this,bgImage,iconIMG,config,help,playBIMG);
 		
 		setResizable(false);
 		
@@ -56,20 +56,17 @@ public class MainWindow extends JFrame implements MouseListener,ActionListener{
 		frame.setLayout(new BorderLayout());
 		//left configurations
 		int leftDimX = (xDim/2)+ 20;
-		left = new JPanel();
 		left.setPreferredSize(new Dimension(leftDimX,50));
 		left.setLayout(new GridLayout(4,1));
-		left.setBackground(Color.red);
+		left.setBackground(new Color(0xFFC55A));
 		//right configurations
-		right = new JPanel();
 		right.setPreferredSize(new Dimension((xDim/2)-20,50));
 		right.setBackground(Color.blue);
 		
 		//butonsPanel Config
 		
-		buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new GridLayout(1,2));
-		buttonsPanel.setBackground(Color.gray);
+		buttonsPanel.setBackground(new Color(0xFFC55A));
 		
 
 		
@@ -78,40 +75,33 @@ public class MainWindow extends JFrame implements MouseListener,ActionListener{
 		iconLabel = new JLabel();
 		iconLabel.setBackground(Color.green);
 		
-		//playBIMG config
-		
-		playBIMG = new ImageIcon("playB.png");
 		
 		//playB config
-		playB = new JButton(playBIMG);
 		playB.setBounds(860-20,100,10,10);
 		playB.setBorder(BorderFactory.createEmptyBorder());
 		playB.setContentAreaFilled(false);
+		playB.addActionListener(this);
 		
-		//config (image) config
-		
-		config = new ImageIcon("config.png");
+	
 		
 		
 		//configB config
-		configB = new JButton(config);
 		configB.setBorder(BorderFactory.createEmptyBorder());
 		configB.setContentAreaFilled(false);
+		configB.addActionListener(this);
 		
-		//help (image) config
-		
-		help = new ImageIcon("info.png");
-				
 		//infoB config
-		infoB = new JButton(help);
 		infoB.setContentAreaFilled(false);
+		infoB.setBorder(BorderFactory.createEmptyBorder());
+		infoB.addActionListener(this);
 		
 		//leaderboards
 		leaderboard = new JTextPane();
 		leaderboard.setBorder(BorderFactory.createEtchedBorder());
-		appendToPane(leaderboard, "Position : Player : Score,\n\n", Color.BLACK,30);
-		appendToPane(leaderboard, "1 :  AAA : 2000,\n", Color.BLUE,20);
-		appendToPane(leaderboard, "2 : ABBB : 1000,\n", Color.RED,20);
+		leaderboard.setBackground(new Color(0x2C4E80));
+		appendToPane(leaderboard, "Position : Player : Score,\n\n", Color.WHITE,30);
+		appendToPane(leaderboard, "1 :  AAA : 2000,\n", Color.WHITE,20);
+		appendToPane(leaderboard, "2 : ABBB : 1000,\n", Color.WHITE,20);
 		leaderboard.setEditable(false);
 		
 		
@@ -130,11 +120,9 @@ public class MainWindow extends JFrame implements MouseListener,ActionListener{
 		
 		
 		
-	}
-	
-	public void playChange(){
 		
 	}
+	
 	public void configChange() {
 		
 	}
@@ -186,8 +174,21 @@ public class MainWindow extends JFrame implements MouseListener,ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(e.getSource()==playB) {
+			System.out.println("play");
+			left.setVisible(false);
+			right.setVisible(false);
+		}
+		else if(e.getSource()==configB) {
+			System.out.println("config");
+			left.setVisible(false);
+			right.setVisible(false);
+		}
+		else if(e.getSource()==infoB) {
+			System.out.println("tutorial");
+			left.setVisible(false);
+			right.setVisible(false);
+		}
 	}
 
 }
