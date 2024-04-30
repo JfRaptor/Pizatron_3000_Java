@@ -31,7 +31,11 @@ import javax.swing.event.ChangeListener;
 
 public class MainWindow extends JFrame implements MouseListener, ActionListener, ChangeListener{
 	
-	int place = 0; 
+	int place = 0;
+	boolean loadCon = false;
+	boolean loadHelp = false;
+	boolean loadGame = false;
+	
 	
 	//Menu principal
 	JPanel left = new JPanel(),right = new JPanel(),buttonsPanel= new JPanel();
@@ -47,6 +51,8 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 	JComboBox res = new JComboBox(sizes) ;
 	JSlider volumen = new JSlider(0,100,50);
 	JLabel resLabel = new JLabel(), volumenLabel = new JLabel();
+	JButton backB = new JButton();
+	ImageIcon backBIMG = new ImageIcon("backB.png");
 	
 	
 	
@@ -66,8 +72,19 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 		
 	}
+	public void changeLaunchMenu(JPanel left,JPanel Right) {
+		place = 0;
+		left.setVisible(true);
+		right.setVisible(true);
+	}
+	public void changeConfig(JPanel configPanel) {
+		place = 1;
+		configPanel.setVisible(true);
+	}
 	
 	public void launchMenu(JPanel left ,JPanel right  ,JLabel iconLabel ,JPanel buttonsPanel, JButton playB ,JButton configB ,JButton infoB ,JTextPane leaderboard ,JFrame frame,ImageIcon bgImage ,ImageIcon iconIMG,ImageIcon config,ImageIcon help,ImageIcon playBIMG){
+		left.setVisible(true);
+		right.setVisible(true);
 		frame.setLayout(new BorderLayout());
 		//left configurations
 		int leftDimX = (xDim/2)+ 20;
@@ -138,30 +155,31 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		
 	}
 	
-	public void configChange(JPanel left) {
+	public void config(JComboBox res,JFrame frame,JPanel mainCon,JPanel configPanel,JSlider volumen,JLabel resLabel,JLabel volumenLabel,JButton backB,ImageIcon backBIMG) {
 		
+		mainCon.setVisible(true);
+		configPanel.setVisible(true);
+		loadCon = true;
 		
-		
-	}
-	public void helpChange(JComboBox res,JFrame frame,JPanel mainCon,JPanel configPanel,JSlider volumen,JLabel resLabel,JLabel volumenLabel) {
 		place = 1;
 		//config panel configuration 
 		configPanel.setLayout(new BorderLayout());
-		configPanel.setBackground(new Color(0xFFC55A));
 		
 		//volumen Config
 		volumen.setSize(new Dimension(400,200));
 		volumen.setPaintTicks(true);
 		volumen.setPaintLabels(true);
 		volumen.setMinorTickSpacing(1);
+		volumen.setBackground(new Color(0xFFC56A));
 		
 		//volumenLabel Config
 		volumenLabel.setHorizontalAlignment(JTextField.CENTER);
 		volumenLabel.setText("Volumen");
-		volumenLabel.setFont(new Font("Impact", Font.PLAIN,20));
+		volumenLabel.setFont(new Font("Impact", Font.PLAIN,50));
+		volumenLabel.setBackground(new Color(0xFFC56A));
 		
 		//mainCon
-		mainCon.setLayout(new GridLayout(4,1));
+		mainCon.setLayout(new GridLayout(5,1));
 		mainCon.setBackground(new Color(0xFFC55A));
 		mainCon.add(res);
 		mainCon.add(volumen);
@@ -170,19 +188,37 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 		//res config
 		res.addActionListener(this);
 		frame.add(configPanel);
+		res.setBackground(new Color(0x5BB4C4));
 		
 		
 		//resLabel config
 		resLabel.setHorizontalAlignment(JTextField.CENTER);
 		resLabel.setText("Resolucion");
-		resLabel.setFont(new Font("Impact", Font.PLAIN,20));
+		resLabel.setFont(new Font("Impact", Font.PLAIN,50));
+		resLabel.setBackground(new Color(0x5BB4C4));
 		
-		configPanel.add(res,BorderLayout.NORTH);
+		
+		//backB config
+		backB.setContentAreaFilled(false);
+		backB.setIcon(backBIMG);
+		backB.setBorder(BorderFactory.createEmptyBorder());
+		backB.addActionListener(this);
+		backB.setHorizontalAlignment(10);
+		
+		
+		
 		configPanel.add(mainCon,BorderLayout.CENTER);
+		mainCon.add(backB);
 		mainCon.add(resLabel);
 		mainCon.add(res);
 		mainCon.add(volumenLabel);
 		mainCon.add(volumen);
+		
+		
+		
+	}
+	public void helpChange() {
+		
 		
 	}
 	
@@ -237,10 +273,15 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 				right.setVisible(false);
 		}
 			else if(e.getSource()==configB) {
-				System.out.println("config");
 				left.setVisible(false);
 				right.setVisible(false);
-				helpChange(res,this,mainCon,configPanel,volumen,resLabel,volumenLabel);
+				if(loadCon) {
+					changeConfig(configPanel);
+					
+				}
+				else {
+					config(res,this,mainCon,configPanel,volumen,resLabel,volumenLabel,backB,backBIMG);
+				}
 		}
 			else if(e.getSource()==infoB) {
 				System.out.println("tutorial");
@@ -270,6 +311,11 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener,
 					yDim = 1000;
 					this.setSize(xDim,yDim);
 				}
+			}
+			else if(e.getSource()==backB) {
+				configPanel.setVisible(false);
+				changeLaunchMenu(left,right);
+				
 			}
 		}
 	}
