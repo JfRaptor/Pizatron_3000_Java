@@ -2,6 +2,7 @@ package co.edu.unbosque.view;
 
 
 import java.awt.BorderLayout;
+import javax.swing.JComboBox;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -14,18 +15,25 @@ import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-public class MainWindow extends JFrame implements MouseListener, ActionListener{
+public class MainWindow extends JFrame implements MouseListener, ActionListener, ChangeListener{
 	
+	int place = 0; 
 	
+	//Menu principal
 	JPanel left = new JPanel(),right = new JPanel(),buttonsPanel= new JPanel();
 	ImageIcon bgImage,iconIMG = new ImageIcon("logo.png"),config = new ImageIcon("config.png"),help = new ImageIcon("info.png"),playBIMG = new ImageIcon("playB.png");;
 	JButton playB = new JButton(playBIMG) ,configB = new JButton(config),infoB = new JButton(help);
@@ -33,6 +41,12 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener{
 	JTextPane leaderboard = new JTextPane();
 	int xDim = 1700 ,yDim = 800;
 	
+	//Menu Configuraciones
+	JPanel configPanel = new JPanel() , mainCon = new JPanel();
+	String[] sizes ={"500,250","800,400","1700,800","2000,1000",};
+	JComboBox res = new JComboBox(sizes) ;
+	JSlider volumen = new JSlider(0,100,50);
+	JLabel resLabel = new JLabel(), volumenLabel = new JLabel();
 	
 	
 	
@@ -46,6 +60,7 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener{
 		launchMenu(left,right,iconLabel,buttonsPanel,playB,configB,infoB,leaderboard,this,bgImage,iconIMG,config,help,playBIMG);
 		
 		setResizable(false);
+		
 		
 		
 		
@@ -123,10 +138,51 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener{
 		
 	}
 	
-	public void configChange() {
+	public void configChange(JPanel left) {
+		
+		
 		
 	}
-	public void helpChange() {
+	public void helpChange(JComboBox res,JFrame frame,JPanel mainCon,JPanel configPanel,JSlider volumen,JLabel resLabel,JLabel volumenLabel) {
+		place = 1;
+		//config panel configuration 
+		configPanel.setLayout(new BorderLayout());
+		configPanel.setBackground(new Color(0xFFC55A));
+		
+		//volumen Config
+		volumen.setSize(new Dimension(400,200));
+		volumen.setPaintTicks(true);
+		volumen.setPaintLabels(true);
+		volumen.setMinorTickSpacing(1);
+		
+		//volumenLabel Config
+		volumenLabel.setHorizontalAlignment(JTextField.CENTER);
+		volumenLabel.setText("Volumen");
+		volumenLabel.setFont(new Font("Impact", Font.PLAIN,20));
+		
+		//mainCon
+		mainCon.setLayout(new GridLayout(4,1));
+		mainCon.setBackground(new Color(0xFFC55A));
+		mainCon.add(res);
+		mainCon.add(volumen);
+		
+		
+		//res config
+		res.addActionListener(this);
+		frame.add(configPanel);
+		
+		
+		//resLabel config
+		resLabel.setHorizontalAlignment(JTextField.CENTER);
+		resLabel.setText("Resolucion");
+		resLabel.setFont(new Font("Impact", Font.PLAIN,20));
+		
+		configPanel.add(res,BorderLayout.NORTH);
+		configPanel.add(mainCon,BorderLayout.CENTER);
+		mainCon.add(resLabel);
+		mainCon.add(res);
+		mainCon.add(volumenLabel);
+		mainCon.add(volumen);
 		
 	}
 	
@@ -174,21 +230,54 @@ public class MainWindow extends JFrame implements MouseListener, ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==playB) {
-			System.out.println("play");
-			left.setVisible(false);
-			right.setVisible(false);
+		if(place == 0) {
+			if(e.getSource()==playB) {
+				System.out.println("play");
+				left.setVisible(false);
+				right.setVisible(false);
 		}
-		else if(e.getSource()==configB) {
-			System.out.println("config");
-			left.setVisible(false);
-			right.setVisible(false);
+			else if(e.getSource()==configB) {
+				System.out.println("config");
+				left.setVisible(false);
+				right.setVisible(false);
+				helpChange(res,this,mainCon,configPanel,volumen,resLabel,volumenLabel);
 		}
-		else if(e.getSource()==infoB) {
-			System.out.println("tutorial");
-			left.setVisible(false);
-			right.setVisible(false);
+			else if(e.getSource()==infoB) {
+				System.out.println("tutorial");
+				left.setVisible(false);
+				right.setVisible(false);
+			}
 		}
+		if(place==1) {
+			if(e.getSource()==res) {
+				if(res.getSelectedItem()=="500,250") {
+					xDim = 500;
+					yDim = 250;
+					this.setSize(xDim,yDim);
+				}
+				else if(res.getSelectedItem()=="800,400") {
+					xDim = 800;
+					yDim = 400;
+					this.setSize(xDim,yDim);
+				}
+				else if(res.getSelectedItem()=="1700,800") {
+					xDim = 1700;
+					yDim = 800;
+					this.setSize(xDim,yDim);
+				}
+				else if(res.getSelectedItem()=="2000,1000") {
+					xDim = 2000;
+					yDim = 1000;
+					this.setSize(xDim,yDim);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		
+		
 	}
 
 }
